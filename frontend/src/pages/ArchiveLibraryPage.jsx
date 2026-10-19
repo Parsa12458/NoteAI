@@ -1,4 +1,4 @@
-import { useState, useEffect, type FC } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import {
   School,
@@ -14,43 +14,33 @@ import {
   Maximize2,
   Minimize2,
 } from 'lucide-react'
-import type { Classroom, Course, Session, Note } from '../types'
 import { api } from '../services/api'
 import { MarkdownView } from '../components/MarkdownView'
 import { MinimalAudioPlayer } from '../components/MinimalAudioPlayer'
 import { appleSpring, appleSnappySpring } from '../utils/cn'
 
-interface ArchiveLibraryPageProps {
-  classrooms: Classroom[]
-  courses: Course[]
-  targetSessionId?: string | number | null
-  onClearTargetSession?: () => void
-}
-
-type TabType = 'notes' | 'exam_tips' | 'transcript' | 'summary'
-
-export const ArchiveLibraryPage: FC<ArchiveLibraryPageProps> = ({
+export const ArchiveLibraryPage = ({
   classrooms,
   courses,
   targetSessionId,
   onClearTargetSession,
 }) => {
   // Column 1: Classroom selection
-  const [selectedClassroomId, setSelectedClassroomId] = useState<string | number>(
+  const [selectedClassroomId, setSelectedClassroomId] = useState(
     classrooms[0]?.id || ''
   )
   const [classSearch, setClassSearch] = useState('')
 
   // Column 2: Course & Session selection
-  const [selectedCourseId, setSelectedCourseId] = useState<string | number>('')
-  const [sessions, setSessions] = useState<Session[]>([])
-  const [selectedSessionId, setSelectedSessionId] = useState<string | number | null>(null)
+  const [selectedCourseId, setSelectedCourseId] = useState('')
+  const [sessions, setSessions] = useState([])
+  const [selectedSessionId, setSelectedSessionId] = useState(null)
   const [sessionsLoading, setSessionsLoading] = useState(false)
 
   // Column 3: Note inspection
-  const [currentNote, setCurrentNote] = useState<Note | null>(null)
+  const [currentNote, setCurrentNote] = useState(null)
   const [noteLoading, setNoteLoading] = useState(false)
-  const [activeTab, setActiveTab] = useState<TabType>('notes')
+  const [activeTab, setActiveTab] = useState('notes')
   const [transcriptSearch, setTranscriptSearch] = useState('')
   const [copied, setCopied] = useState(false)
   const [isFocusMode, setIsFocusMode] = useState(false)
@@ -394,14 +384,12 @@ export const ArchiveLibraryPage: FC<ArchiveLibraryPageProps> = ({
           {/* Apple Segmented Tabs Control */}
           <div className="px-6 py-2.5 border-b border-black/[0.06] dark:border-white/[0.08] flex items-center justify-between gap-3 bg-black/[0.015] dark:bg-white/[0.02]">
             <div className="flex items-center gap-1 p-1 rounded-2xl bg-black/[0.05] dark:bg-white/[0.06]">
-              {(
-                [
-                  { id: 'notes', label: '📝 جزوه هوشمند' },
-                  { id: 'exam_tips', label: '🎯 نکات امتحانی' },
-                  { id: 'transcript', label: '🗣 متن تدریس' },
-                  { id: 'summary', label: '⚡️ خلاصه سریع' },
-                ] as const
-              ).map((tab) => {
+              {[
+                { id: 'notes', label: '📝 جزوه هوشمند' },
+                { id: 'exam_tips', label: '🎯 نکات امتحانی' },
+                { id: 'transcript', label: '🗣 متن تدریس' },
+                { id: 'summary', label: '⚡️ خلاصه سریع' },
+              ].map((tab) => {
                 const isActive = activeTab === tab.id
                 return (
                   <button
@@ -560,3 +548,4 @@ export const ArchiveLibraryPage: FC<ArchiveLibraryPageProps> = ({
     </div>
   )
 }
+

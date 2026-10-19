@@ -1,20 +1,19 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Mic, BookOpen, Sun, Moon, Sparkles } from 'lucide-react'
-import type { Classroom, Course } from './types'
 import { api } from './services/api'
 import { LiveStudioPage } from './pages/LiveStudioPage'
 import { ArchiveLibraryPage } from './pages/ArchiveLibraryPage'
 import { appleSnappySpring } from './utils/cn'
 
 export default function App() {
-  const [activeView, setActiveView] = useState<'studio' | 'archive'>('studio')
-  const [classrooms, setClassrooms] = useState<Classroom[]>([])
-  const [courses, setCourses] = useState<Course[]>([])
-  const [targetSessionId, setTargetSessionId] = useState<string | number | null>(null)
+  const [activeView, setActiveView] = useState('studio')
+  const [classrooms, setClassrooms] = useState([])
+  const [courses, setCourses] = useState([])
+  const [targetSessionId, setTargetSessionId] = useState(null)
 
   // Theme support
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+  const [theme, setTheme] = useState(() => {
     try {
       const saved = localStorage.getItem('noteai_apple_theme')
       if (saved === 'dark' || saved === 'light') return saved
@@ -49,7 +48,7 @@ export default function App() {
     loadData()
   }, [])
 
-  const handleNavigateToSession = (sessionId: string | number) => {
+  const handleNavigateToSession = (sessionId) => {
     setTargetSessionId(sessionId)
     setActiveView('archive')
   }
@@ -162,3 +161,4 @@ export default function App() {
     </div>
   )
 }
+

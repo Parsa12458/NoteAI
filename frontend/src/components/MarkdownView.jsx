@@ -1,16 +1,11 @@
-import { useState, type FC, type ReactNode } from 'react'
+import { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 import rehypeHighlight from 'rehype-highlight'
 import { Check, Copy } from 'lucide-react'
 
-interface MarkdownViewProps {
-  content: string
-  className?: string
-}
-
-export const MarkdownView: FC<MarkdownViewProps> = ({ content, className = '' }) => {
+export const MarkdownView = ({ content, className = '' }) => {
   return (
     <div className={`prose dark:prose-invert max-w-none text-right font-vazir leading-relaxed text-zinc-800 dark:text-zinc-200 ${className}`}>
       <ReactMarkdown
@@ -74,7 +69,7 @@ export const MarkdownView: FC<MarkdownViewProps> = ({ content, className = '' })
   )
 }
 
-function CodeBlock({ children, className }: { children: ReactNode; className?: string }) {
+function CodeBlock({ children, className }) {
   const [copied, setCopied] = useState(false)
   const codeString = String(children).replace(/\n$/, '')
   const lang = className?.replace('language-', '') || 'code'
@@ -113,3 +108,4 @@ function CodeBlock({ children, className }: { children: ReactNode; className?: s
     </div>
   )
 }
+

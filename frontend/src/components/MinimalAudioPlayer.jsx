@@ -1,88 +1,85 @@
-import { useState, useRef, useEffect, type FC, type ChangeEvent } from 'react'
-import { Play, Pause, RotateCcw, Volume2, VolumeX } from 'lucide-react'
-import { motion } from 'framer-motion'
-import { appleSpring } from '../utils/cn'
+import { useState, useRef, useEffect } from "react";
+import { Play, Pause, RotateCcw, Volume2, VolumeX } from "lucide-react";
+import { motion } from "framer-motion";
+import { appleSpring } from "../utils/cn";
 
-interface MinimalAudioPlayerProps {
-  audioUrl?: string
-  title?: string
-  className?: string
-}
-
-export const MinimalAudioPlayer: FC<MinimalAudioPlayerProps> = ({
+export const MinimalAudioPlayer = ({
   audioUrl,
-  title = 'صوت ضبط‌شده جلسه',
-  className = '',
+  title = "صوت ضبط‌شده جلسه",
+  className = "",
 }) => {
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [currentTime, setCurrentTime] = useState(0)
-  const [duration, setDuration] = useState(0)
-  const [isMuted, setIsMuted] = useState(false)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
+  const audioRef = useRef(null);
 
   const effectiveUrl =
-    audioUrl || 'https://actions.google.com/sounds/v1/ambiences/outdoor_water_fountain.ogg'
+    audioUrl ||
+    "https://actions.google.com/sounds/v1/ambiences/outdoor_water_fountain.ogg";
 
   const togglePlay = () => {
-    if (!audioRef.current) return
+    if (!audioRef.current) return;
     if (isPlaying) {
-      audioRef.current.pause()
-      setIsPlaying(false)
+      audioRef.current.pause();
+      setIsPlaying(false);
     } else {
-      audioRef.current.play().catch(() => {})
-      setIsPlaying(true)
+      audioRef.current.play().catch(() => {});
+      setIsPlaying(true);
     }
-  }
+  };
 
   const handleTimeUpdate = () => {
     if (audioRef.current) {
-      setCurrentTime(audioRef.current.currentTime)
+      setCurrentTime(audioRef.current.currentTime);
     }
-  }
+  };
 
   const handleLoadedMetadata = () => {
     if (audioRef.current) {
-      setDuration(audioRef.current.duration)
+      setDuration(audioRef.current.duration);
     }
-  }
+  };
 
-  const handleSeek = (e: ChangeEvent<HTMLInputElement>) => {
-    const val = Number(e.target.value)
+  const handleSeek = (e) => {
+    const val = Number(e.target.value);
     if (audioRef.current) {
-      audioRef.current.currentTime = val
-      setCurrentTime(val)
+      audioRef.current.currentTime = val;
+      setCurrentTime(val);
     }
-  }
+  };
 
   const handleRestart = () => {
     if (audioRef.current) {
-      audioRef.current.currentTime = 0
-      audioRef.current.play().catch(() => {})
-      setIsPlaying(true)
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch(() => {});
+      setIsPlaying(true);
     }
-  }
+  };
 
   const toggleMute = () => {
     if (audioRef.current) {
-      audioRef.current.muted = !isMuted
-      setIsMuted(!isMuted)
+      audioRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
     }
-  }
+  };
 
   useEffect(() => {
-    setIsPlaying(false)
-    setCurrentTime(0)
-  }, [audioUrl])
+    setIsPlaying(false);
+    setCurrentTime(0);
+  }, [audioUrl]);
 
-  const formatTime = (seconds: number) => {
-    if (isNaN(seconds)) return '00:00'
-    const mins = Math.floor(seconds / 60)
-    const secs = Math.floor(seconds % 60)
-    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
-  }
+  const formatTime = (seconds) => {
+    if (isNaN(seconds)) return "00:00";
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+  };
 
   return (
-    <div className={`p-4 rounded-3xl apple-glass-card flex flex-col gap-3 ${className}`}>
+    <div
+      className={`p-4 rounded-3xl apple-glass-card flex flex-col gap-3 ${className}`}
+    >
       <audio
         ref={audioRef}
         src={effectiveUrl}
@@ -149,5 +146,5 @@ export const MinimalAudioPlayer: FC<MinimalAudioPlayerProps> = ({
         </button>
       </div>
     </div>
-  )
-}
+  );
+};

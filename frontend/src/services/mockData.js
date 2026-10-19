@@ -1,102 +1,102 @@
-import type { Classroom, Course, Note, Session } from '../types'
-
-export const INITIAL_CLASSROOMS: Classroom[] = [
+export const INITIAL_CLASSROOMS = [
   {
     id: 1,
-    name: 'کلاس ۱۰۱ — دهم ریاضی',
-    grade: 'دهم',
-    academic_year: '1403-1404',
+    name: "کلاس ۱۰۱ — دهم ریاضی",
+    grade: "دهم",
+    academic_year: "1403-1404",
     courses_count: 3,
     sessions_count: 8,
   },
   {
     id: 2,
-    name: 'کلاس ۱۰۲ — دوازدهم تجربی',
-    grade: 'دوازدهم',
-    academic_year: '1403-1404',
+    name: "کلاس ۱۰۲ — دوازدهم تجربی",
+    grade: "دوازدهم",
+    academic_year: "1403-1404",
     courses_count: 2,
     sessions_count: 5,
   },
   {
     id: 3,
-    name: 'کلاس ۲۰۴ — یازدهم کامپیوتر',
-    grade: 'یازدهم',
-    academic_year: '1403-1404',
+    name: "کلاس ۲۰۴ — یازدهم کامپیوتر",
+    grade: "یازدهم",
+    academic_year: "1403-1404",
     courses_count: 2,
     sessions_count: 4,
   },
-]
+];
 
-export const INITIAL_COURSES: Course[] = [
+export const INITIAL_COURSES = [
   {
     id: 101,
-    name: 'ریاضی ۱ و هندسه تحلیلی',
+    name: "ریاضی ۱ و هندسه تحلیلی",
     classroom: 1,
-    classroom_name: 'کلاس ۱۰۱ — دهم ریاضی',
-    color: '#3B82F6', // Blue
-    description: 'مباحث رادیکال‌ها، عبارت‌های جبری، معادلات درجه دوم و اتحادها.',
+    classroom_name: "کلاس ۱۰۱ — دهم ریاضی",
+    color: "#3B82F6", // Blue
+    description:
+      "مباحث رادیکال‌ها، عبارت‌های جبری، معادلات درجه دوم و اتحادها.",
     sessions_count: 4,
   },
   {
     id: 102,
-    name: 'فیزیک ۱ و آزمایشگاه',
+    name: "فیزیک ۱ و آزمایشگاه",
     classroom: 1,
-    classroom_name: 'کلاس ۱۰۱ — دهم ریاضی',
-    color: '#8B5CF6', // Purple
-    description: 'فیزیک و اندازه‌گیری، کار و انرژی، و ویژگی‌های فیزیکی مواد.',
+    classroom_name: "کلاس ۱۰۱ — دهم ریاضی",
+    color: "#8B5CF6", // Purple
+    description: "فیزیک و اندازه‌گیری، کار و انرژی، و ویژگی‌های فیزیکی مواد.",
     sessions_count: 3,
   },
   {
     id: 103,
-    name: 'شیمی ۱',
+    name: "شیمی ۱",
     classroom: 1,
-    classroom_name: 'کلاس ۱۰۱ — دهم ریاضی',
-    color: '#10B981', // Emerald
-    description: 'کیهان زادگاه الفبای هستی، پیوندهای کووالانسی و استوکیومتری.',
+    classroom_name: "کلاس ۱۰۱ — دهم ریاضی",
+    color: "#10B981", // Emerald
+    description: "کیهان زادگاه الفبای هستی، پیوندهای کووالانسی و استوکیومتری.",
     sessions_count: 1,
   },
   {
     id: 201,
-    name: 'زیست‌شناسی ۳',
+    name: "زیست‌شناسی ۳",
     classroom: 2,
-    classroom_name: 'کلاس ۱۰۲ — دوازدهم تجربی',
-    color: '#EC4899', // Pink
-    description: 'مولکول‌های اطلاعاتی، جریان اطلاعات در یاخته و انتقال انرژی.',
+    classroom_name: "کلاس ۱۰۲ — دوازدهم تجربی",
+    color: "#EC4899", // Pink
+    description: "مولکول‌های اطلاعاتی، جریان اطلاعات در یاخته و انتقال انرژی.",
     sessions_count: 3,
   },
   {
     id: 202,
-    name: 'شیمی ۳ دوازدهم',
+    name: "شیمی ۳ دوازدهم",
     classroom: 2,
-    classroom_name: 'کلاس ۱۰۲ — دوازدهم تجربی',
-    color: '#F59E0B', // Amber
-    description: 'مولکول‌ها در خدمت تندرستی و آسایش، اسیدها و بازها.',
+    classroom_name: "کلاس ۱۰۲ — دوازدهم تجربی",
+    color: "#F59E0B", // Amber
+    description: "مولکول‌ها در خدمت تندرستی و آسایش، اسیدها و بازها.",
     sessions_count: 2,
   },
-]
+];
 
-export const INITIAL_SESSIONS: Session[] = [
+export const INITIAL_SESSIONS = [
   {
     id: 1001,
     course: 101,
-    course_name: 'ریاضی ۱ و هندسه تحلیلی',
-    classroom_name: 'کلاس ۱۰۱ — دهم ریاضی',
-    title: 'جلسه ۴: حل معادلات درجه دوم به روش دلتا و هندسه سهمی',
-    created_at: '1403/11/28 - 09:15',
-    status: 'COMPLETED',
+    course_name: "ریاضی ۱ و هندسه تحلیلی",
+    classroom_name: "کلاس ۱۰۱ — دهم ریاضی",
+    title: "جلسه ۴: حل معادلات درجه دوم به روش دلتا و هندسه سهمی",
+    created_at: "1403/11/28 - 09:15",
+    status: "COMPLETED",
     duration_seconds: 2840,
     has_note: true,
     has_quiz: true,
-    audio_file_url: 'https://actions.google.com/sounds/v1/ambiences/outdoor_water_fountain.ogg',
+    audio_file_url:
+      "https://actions.google.com/sounds/v1/ambiences/outdoor_water_fountain.ogg",
   },
   {
     id: 1002,
     course: 101,
-    course_name: 'ریاضی ۱ و هندسه تحلیلی',
-    classroom_name: 'کلاس ۱۰۱ — دهم ریاضی',
-    title: 'جلسه ۳: بسط دوجمله‌ای و اتحادهای مثلثاتی اولیه',
-    created_at: '1403/11/21 - 09:15',
-    status: 'COMPLETED',
+    course_name: "ریاضی ۱ و هندسه تحلیلی",
+    classroom_name: "کلاس ۱۰۱ — دهم ریاضی",
+    title: "جلسه ۳: بسط دوجمله‌ای و اتحادهای مثلثاتی اولیه",
+    created_at: "1403/11/21 - 09:15",
+    status: "COMPLETED",
     duration_seconds: 3120,
     has_note: true,
     has_quiz: true,
@@ -104,48 +104,51 @@ export const INITIAL_SESSIONS: Session[] = [
   {
     id: 1003,
     course: 102,
-    course_name: 'فیزیک ۱ و آزمایشگاه',
-    classroom_name: 'کلاس ۱۰۱ — دهم ریاضی',
-    title: 'جلسه ۵: قضیه کار و انرژی پتانسیل کشسانی',
-    created_at: '1403/11/25 - 10:45',
-    status: 'COMPLETED',
+    course_name: "فیزیک ۱ و آزمایشگاه",
+    classroom_name: "کلاس ۱۰۱ — دهم ریاضی",
+    title: "جلسه ۵: قضیه کار و انرژی پتانسیل کشسانی",
+    created_at: "1403/11/25 - 10:45",
+    status: "COMPLETED",
     duration_seconds: 2950,
     has_note: true,
     has_quiz: false,
   },
-]
+];
 
-export const INITIAL_NOTES: Record<string | number, Note> = {
+export const INITIAL_NOTES = {
   1001: {
     id: 501,
     session: 1001,
-    title: 'جزوه هوشمند جلسه ۴: حل معادلات درجه دوم و نمودار سهمی',
+    title: "جزوه هوشمند جلسه ۴: حل معادلات درجه دوم و نمودار سهمی",
     executive_summary:
-      'در این جلسه، روش‌های جبری حل معادله درجه دوم $ax^2 + bx + c = 0$ از طریق تجزیه، مربع کامل و فرمول کلی دلتا ($\Delta = b^2 - 4ac$) بررسی شد. همچنین چگونگی تعیین راس سهمی $(h, k) = (-\\frac{b}{2a}, -\\frac{\Delta}{4a})$ و تقعر آن تدریس گردید.',
+      "در این جلسه، روش‌های جبری حل معادله درجه دوم $ax^2 + bx + c = 0$ از طریق تجزیه، مربع کامل و فرمول کلی دلتا ($\\Delta = b^2 - 4ac$) بررسی شد. همچنین چگونگی تعیین راس سهمی $(h, k) = (-\\frac{b}{2a}, -\\frac{\\Delta}{4a})$ و تقعر آن تدریس گردید.",
     key_topics: [
-      'روش فرمول کلی (دستور دلتا)',
-      'وضعیت ریشه‌ها بر اساس علامت $\Delta$',
-      'مختصات راس و محور تقارن سهمی',
-      'کاربرد فیزیکی سهمی در پرتابه‌ها',
+      "روش فرمول کلی (دستور دلتا)",
+      "وضعیت ریشه‌ها بر اساس علامت $\\Delta$",
+      "مختصات راس و محور تقارن سهمی",
+      "کاربرد فیزیکی سهمی در پرتابه‌ها",
     ],
     exam_tips: [
       {
-        statement: 'حتماً دقت کنید: اگر $\Delta < 0$ باشد، سهمی هرگز محور $x$ را قطع نمی‌کند و معادله ریشه حقیقی ندارد. استاد تاکید کردند در امتحان این سوال با ضریب منفی $a$ طرح خواهد شد.',
-        importance: 'بسیار مهم',
-        timestamp: '00:18:24',
-        context: 'بررسی حالت دلتای منفی و علامت ضریب $a$',
+        statement:
+          "حتماً دقت کنید: اگر $\\Delta < 0$ باشد، سهمی هرگز محور $x$ را قطع نمی‌کند و معادله ریشه حقیقی ندارد. استاد تاکید کردند در امتحان این سوال با ضریب منفی $a$ طرح خواهد شد.",
+        importance: "بسیار مهم",
+        timestamp: "00:18:24",
+        context: "بررسی حالت دلتای منفی و علامت ضریب $a$",
       },
       {
-        statement: 'محور تقارن سهمی خطی عمودی به معادله $x = -\\frac{b}{2a}$ است. پیدا کردن راس سهمی بدون رسم کامل در تست‌های خردادماه نمره مستقیم دارد.',
-        importance: 'تاکید مکرر',
-        timestamp: '00:32:10',
-        context: 'حل تست راس سهمی و بیشترین مقدار تابع',
+        statement:
+          "محور تقارن سهمی خطی عمودی به معادله $x = -\\frac{b}{2a}$ است. پیدا کردن راس سهمی بدون رسم کامل در تست‌های خردادماه نمره مستقیم دارد.",
+        importance: "تاکید مکرر",
+        timestamp: "00:32:10",
+        context: "حل تست راس سهمی و بیشترین مقدار تابع",
       },
       {
-        statement: 'در روش مربع کامل کردن، حتماً قبل از هر کاری ضریب $x^2$ را برابر یک کنید تا دچار خطای کسری نشوید.',
-        importance: 'احتمال آزمون',
-        timestamp: '00:12:45',
-        context: 'آموزش مربع کامل کردن',
+        statement:
+          "در روش مربع کامل کردن، حتماً قبل از هر کاری ضریب $x^2$ را برابر یک کنید تا دچار خطای کسری نشوید.",
+        importance: "احتمال آزمون",
+        timestamp: "00:12:45",
+        context: "آموزش مربع کامل کردن",
       },
     ],
     content_markdown: `# معادله درجه دوم و نمودار سهمی
@@ -209,4 +212,4 @@ $$x_1 = \\frac{5 + 3}{4} = 2, \\qquad x_2 = \\frac{5 - 3}{4} = \\frac{1}{2}$$
 [00:32:10] استاد: معادله خط تقارن منفی b بر روی ۲a هست. این فرمول رو ملکه ذهنتون کنید.
 [00:45:00] استاد: برای جلسه آینده تمرین‌های صفحه ۵۴ تا ۵۷ کتاب درسی حل بشه. خسته نباشید.`,
   },
-}
+};

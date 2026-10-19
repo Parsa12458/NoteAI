@@ -1,5 +1,4 @@
 import axios from 'axios'
-import type { Classroom, Course, CurrentBell, Note, Session, SessionStatus } from '../types'
 import { INITIAL_CLASSROOMS, INITIAL_COURSES, INITIAL_NOTES, INITIAL_SESSIONS } from './mockData'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'
@@ -21,21 +20,21 @@ const localNotes = { ...INITIAL_NOTES }
 
 export const api = {
   // ---------------- CLASSROOMS ----------------
-  async getClassrooms(): Promise<Classroom[]> {
+  async getClassrooms() {
     try {
-      const res = await apiClient.get<Classroom[]>('/classrooms/')
+      const res = await apiClient.get('/classrooms/')
       return res.data
     } catch {
       return localClassrooms
     }
   },
 
-  async createClassroom(payload: { name: string; grade: string; academic_year: string }): Promise<Classroom> {
+  async createClassroom(payload) {
     try {
-      const res = await apiClient.post<Classroom>('/classrooms/', payload)
+      const res = await apiClient.post('/classrooms/', payload)
       return res.data
     } catch {
-      const newCls: Classroom = {
+      const newCls = {
         id: Date.now(),
         name: payload.name,
         grade: payload.grade,
@@ -49,27 +48,22 @@ export const api = {
   },
 
   // ---------------- COURSES ----------------
-  async getCourses(): Promise<Course[]> {
+  async getCourses() {
     try {
-      const res = await apiClient.get<Course[]>('/courses/')
+      const res = await apiClient.get('/courses/')
       return res.data
     } catch {
       return localCourses
     }
   },
 
-  async createCourse(payload: {
-    name: string
-    classroom: string | number
-    color?: string
-    description?: string
-  }): Promise<Course> {
+  async createCourse(payload) {
     try {
-      const res = await apiClient.post<Course>('/courses/', payload)
+      const res = await apiClient.post('/courses/', payload)
       return res.data
     } catch {
       const targetClassroom = localClassrooms.find((c) => String(c.id) === String(payload.classroom))
-      const newCourse: Course = {
+      const newCourse = {
         id: Date.now(),
         name: payload.name,
         classroom: payload.classroom,
@@ -86,9 +80,9 @@ export const api = {
     }
   },
 
-  async getCurrentBell(): Promise<CurrentBell> {
+  async getCurrentBell() {
     try {
-      const res = await apiClient.get<CurrentBell>('/courses/current_bell/')
+      const res = await apiClient.get('/courses/current_bell/')
       return res.data
     } catch {
       // Return detected bell for testing
@@ -105,13 +99,13 @@ export const api = {
   },
 
   // ---------------- SESSIONS & RECORDING ----------------
-  async createSession(payload: { course: string | number; title: string }): Promise<Session> {
+  async createSession(payload) {
     try {
-      const res = await apiClient.post<Session>('/sessions/', payload)
+      const res = await apiClient.post('/sessions/', payload)
       return res.data
     } catch {
       const targetCourse = localCourses.find((c) => String(c.id) === String(payload.course))
-      const newSession: Session = {
+      const newSession = {
         id: Date.now(),
         course: payload.course,
         course_name: targetCourse?.name,
@@ -128,7 +122,7 @@ export const api = {
     }
   },
 
-  async uploadChunk(sessionId: string | number, formData: FormData): Promise<{ status: string; chunk_index: number }> {
+  async uploadChunk(sessionId, formData) {
     try {
       const res = await apiClient.post(`/sessions/${sessionId}/chunks/`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -140,7 +134,7 @@ export const api = {
     }
   },
 
-  async finalizeSession(sessionId: string | number, payload: { sync?: boolean } = { sync: false }): Promise<{ status: string }> {
+  async finalizeSession(sessionId, payload = { sync: false }) {
     try {
       const res = await apiClient.post(`/sessions/${sessionId}/finalize/`, payload)
       return res.data
@@ -176,9 +170,9 @@ export const api = {
     }
   },
 
-  async getSessionStatus(sessionId: string | number): Promise<SessionStatus> {
+  async getSessionStatus(sessionId) {
     try {
-      const res = await apiClient.get<SessionStatus>(`/sessions/${sessionId}/status/`)
+      const res = await apiClient.get(`/sessions/${sessionId}/status/`)
       return res.data
     } catch {
       const sess = localSessions.find((s) => String(s.id) === String(sessionId))
@@ -192,9 +186,9 @@ export const api = {
     }
   },
 
-  async getCourseSessions(courseId: string | number): Promise<Session[]> {
+  async getCourseSessions(courseId) {
     try {
-      const res = await apiClient.get<Session[]>(`/sessions/?course_id=${courseId}`)
+      const res = await apiClient.get(`/sessions/?course_id=${courseId}`)
       return res.data
     } catch {
       return localSessions.filter((s) => String(s.course) === String(courseId))
@@ -202,9 +196,9 @@ export const api = {
   },
 
   // ---------------- NOTES ----------------
-  async getNoteBySession(sessionId: string | number): Promise<Note> {
+  async getNoteBySession(sessionId) {
     try {
-      const res = await apiClient.get<Note>(`/notes/by-session/${sessionId}/`)
+      const res = await apiClient.get(`/notes/by-session/${sessionId}/`)
       return res.data
     } catch {
       const found = localNotes[sessionId]
@@ -214,7 +208,7 @@ export const api = {
     }
   },
 
-  async downloadNoteMarkdown(noteId: string | number): Promise<Blob> {
+  async downloadNoteMarkdown(noteId) {
     try {
       const res = await apiClient.get(`/notes/${noteId}/download/`, {
         responseType: 'blob',
@@ -226,3 +220,4 @@ export const api = {
     }
   },
 }
+

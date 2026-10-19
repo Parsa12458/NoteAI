@@ -1,20 +1,13 @@
-import { useEffect, useRef, type FC } from 'react'
+import { useEffect, useRef } from 'react'
 
-interface AudioVisualizerProps {
-  analyser: AnalyserNode | null
-  isRecording: boolean
-  isPaused: boolean
-  className?: string
-}
-
-export const AudioVisualizer: FC<AudioVisualizerProps> = ({
+export const AudioVisualizer = ({
   analyser,
   isRecording,
   isPaused,
   className = '',
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const animFrameRef = useRef<number | null>(null)
+  const canvasRef = useRef(null)
+  const animFrameRef = useRef(null)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -99,3 +92,4 @@ export const AudioVisualizer: FC<AudioVisualizerProps> = ({
     </div>
   )
 }
+

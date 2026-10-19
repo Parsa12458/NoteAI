@@ -1,41 +1,40 @@
-import { useState, type FC, type FormEvent } from 'react'
+import { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, School } from 'lucide-react'
+import { X, BookOpen } from 'lucide-react'
 import { appleSpring } from '../utils/cn'
-import type { Classroom } from '../types'
 
-interface QuickCreateClassroomModalProps {
-  isOpen: boolean
-  onClose: () => void
-  onSuccess: (classroom: Classroom) => void
-  createAction: (payload: { name: string; grade: string; academic_year: string }) => Promise<Classroom>
-}
+const PRESET_COLORS = ['#3B82F6', '#8B5CF6', '#10B981', '#EC4899', '#F59E0B', '#6366F1', '#14B8A6']
 
-export const QuickCreateClassroomModal: FC<QuickCreateClassroomModalProps> = ({
+export const QuickCreateCourseModal = ({
   isOpen,
   onClose,
   onSuccess,
+  classrooms,
+  defaultClassroomId,
   createAction,
 }) => {
   const [name, setName] = useState('')
-  const [grade, setGrade] = useState('دهم')
-  const [academicYear, setAcademicYear] = useState('1403-1404')
+  const [classroomId, setClassroomId] = useState(defaultClassroomId || classrooms[0]?.id || '')
+  const [selectedColor, setSelectedColor] = useState(PRESET_COLORS[0])
+  const [description, setDescription] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!name.trim() || isSubmitting) return
+    if (!name.trim() || !classroomId || isSubmitting) return
 
     setIsSubmitting(true)
     try {
       const created = await createAction({
         name: name.trim(),
-        grade: grade.trim(),
-        academic_year: academicYear.trim(),
+        classroom: classroomId,
+        color: selectedColor,
+        description: description.trim(),
       })
       onSuccess(created)
       setName('')
+      setDescription('')
       onClose()
     } finally {
       setIsSubmitting(false)
@@ -68,15 +67,18 @@ export const QuickCreateClassroomModal: FC<QuickCreateClassroomModalProps> = ({
                 >
                   <div className="flex items-center justify-between mb-5">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-9 h-9 rounded-2xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
-                        <School className="w-5 h-5" strokeWidth={1.5} />
+                      <div
+                        className="w-9 h-9 rounded-2xl flex items-center justify-center text-white shadow-xs"
+                        style={{ backgroundColor: selectedColor }}
+                      >
+                        <BookOpen className="w-5 h-5" strokeWidth={1.5} />
                       </div>
                       <div>
                         <Dialog.Title className="text-base font-bold text-zinc-900 dark:text-zinc-100">
-                          افزودن کلاس جدید
+                          افزودن درس جدید
                         </Dialog.Title>
                         <p className="text-2xs text-zinc-500 dark:text-zinc-400">
-                          ایجاد سریع کلاس بدون خروج از استودیو
+                          تعریف درس جدید برای ضبط جلسات
                         </p>
                       </div>
                     </div>
@@ -92,44 +94,67 @@ export const QuickCreateClassroomModal: FC<QuickCreateClassroomModalProps> = ({
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                       <label className="block text-2xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5">
-                        نام کلاس یا شعبه *
+                        نام درس *
                       </label>
                       <input
                         type="text"
                         required
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        placeholder="مثال: کلاس ۱۰۱ — دهم ریاضی"
+                        placeholder="مثال: هندسه دهم — فصل ۲"
                         className="w-full px-3.5 py-2.5 text-xs rounded-2xl bg-black/[0.03] dark:bg-white/[0.05] border border-black/[0.08] dark:border-white/[0.1] text-zinc-900 dark:text-zinc-100 focus:outline-hidden focus:ring-2 focus:ring-blue-500/30 transition-all"
                       />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-2xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5">
-                          پایه تحصیلی
-                        </label>
-                        <input
-                          type="text"
-                          value={grade}
-                          onChange={(e) => setGrade(e.target.value)}
-                          placeholder="دهم"
-                          className="w-full px-3.5 py-2.5 text-xs rounded-2xl bg-black/[0.03] dark:bg-white/[0.05] border border-black/[0.08] dark:border-white/[0.1] text-zinc-900 dark:text-zinc-100 focus:outline-hidden focus:ring-2 focus:ring-blue-500/30 transition-all"
-                        />
+                    <div>
+                      <label className="block text-2xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5">
+                        کلاس مربوطه *
+                      </label>
+                      <select
+                        value={classroomId}
+                        onChange={(e) => setClassroomId(e.target.value)}
+                        className="w-full px-3.5 py-2.5 text-xs rounded-2xl bg-black/[0.03] dark:bg-white/[0.05] border border-black/[0.08] dark:border-white/[0.1] text-zinc-900 dark:text-zinc-100 focus:outline-hidden focus:ring-2 focus:ring-blue-500/30 transition-all"
+                      >
+                        {classrooms.map((cls) => (
+                          <option key={cls.id} value={cls.id} className="dark:bg-zinc-900">
+                            {cls.name} ({cls.grade})
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-2xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5">
+                        رنگ تمایز درس
+                      </label>
+                      <div className="flex items-center gap-2">
+                        {PRESET_COLORS.map((color) => (
+                          <button
+                            key={color}
+                            type="button"
+                            onClick={() => setSelectedColor(color)}
+                            className={`w-6 h-6 rounded-full transition-transform ${
+                              selectedColor === color
+                                ? 'scale-125 ring-2 ring-offset-2 ring-blue-500 dark:ring-offset-zinc-900'
+                                : 'hover:scale-110 opacity-80'
+                            }`}
+                            style={{ backgroundColor: color }}
+                          />
+                        ))}
                       </div>
-                      <div>
-                        <label className="block text-2xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5">
-                          سال تحصیلی
-                        </label>
-                        <input
-                          type="text"
-                          value={academicYear}
-                          onChange={(e) => setAcademicYear(e.target.value)}
-                          placeholder="1403-1404"
-                          dir="ltr"
-                          className="w-full px-3.5 py-2.5 text-xs font-mono rounded-2xl bg-black/[0.03] dark:bg-white/[0.05] border border-black/[0.08] dark:border-white/[0.1] text-zinc-900 dark:text-zinc-100 focus:outline-hidden focus:ring-2 focus:ring-blue-500/30 transition-all"
-                        />
-                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-2xs font-semibold text-zinc-600 dark:text-zinc-400 mb-1.5">
+                        توضیحات کوتاه (اختیاری)
+                      </label>
+                      <input
+                        type="text"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder="سرفصل‌ها و توضیحات کوتاه"
+                        className="w-full px-3.5 py-2.5 text-xs rounded-2xl bg-black/[0.03] dark:bg-white/[0.05] border border-black/[0.08] dark:border-white/[0.1] text-zinc-900 dark:text-zinc-100 focus:outline-hidden focus:ring-2 focus:ring-blue-500/30 transition-all"
+                      />
                     </div>
 
                     <div className="pt-2 flex items-center justify-end gap-2">
@@ -145,7 +170,7 @@ export const QuickCreateClassroomModal: FC<QuickCreateClassroomModalProps> = ({
                         disabled={!name.trim() || isSubmitting}
                         className="px-5 py-2 rounded-2xl text-xs font-bold bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white shadow-sm active:scale-95 transition-all"
                       >
-                        {isSubmitting ? 'در حال ثبت...' : 'ایجاد کلاس'}
+                        {isSubmitting ? 'در حال ثبت...' : 'ایجاد درس'}
                       </button>
                     </div>
                   </form>
@@ -158,3 +183,4 @@ export const QuickCreateClassroomModal: FC<QuickCreateClassroomModalProps> = ({
     </Dialog.Root>
   )
 }
+

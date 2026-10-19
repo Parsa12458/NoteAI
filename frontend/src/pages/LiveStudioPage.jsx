@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, type FC } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import {
   Mic,
@@ -14,31 +14,21 @@ import {
   School,
   BookOpen,
 } from 'lucide-react'
-import type { Classroom, Course, CurrentBell, SessionStatus } from '../types'
 import { api } from '../services/api'
 import { AudioVisualizer } from '../components/AudioVisualizer'
 import { QuickCreateClassroomModal } from '../components/QuickCreateClassroomModal'
 import { QuickCreateCourseModal } from '../components/QuickCreateCourseModal'
 import { appleSpring } from '../utils/cn'
 
-interface LiveStudioPageProps {
-  classrooms: Classroom[]
-  courses: Course[]
-  onRefreshData: () => void
-  onNavigateToSession: (sessionId: string | number) => void
-}
-
-type RecordState = 'IDLE' | 'RECORDING' | 'PAUSED' | 'FINALIZING' | 'COMPLETED'
-
-export const LiveStudioPage: FC<LiveStudioPageProps> = ({
+export const LiveStudioPage = ({
   classrooms,
   courses,
   onRefreshData,
   onNavigateToSession,
 }) => {
   // Selection states
-  const [selectedClassroomId, setSelectedClassroomId] = useState<string | number>('')
-  const [selectedCourseId, setSelectedCourseId] = useState<string | number>('')
+  const [selectedClassroomId, setSelectedClassroomId] = useState('')
+  const [selectedCourseId, setSelectedCourseId] = useState('')
   const [sessionTitle, setSessionTitle] = useState('')
 
   // Modals
@@ -46,24 +36,24 @@ export const LiveStudioPage: FC<LiveStudioPageProps> = ({
   const [isCourseModalOpen, setIsCourseModalOpen] = useState(false)
 
   // Current Bell Auto-detect
-  const [currentBell, setCurrentBell] = useState<CurrentBell | null>(null)
+  const [currentBell, setCurrentBell] = useState(null)
   const [bellDismissed, setBellDismissed] = useState(false)
 
   // Audio Recording states
-  const [recordState, setRecordState] = useState<RecordState>('IDLE')
+  const [recordState, setRecordState] = useState('IDLE')
   const [elapsedSeconds, setElapsedSeconds] = useState(0)
-  const [activeSessionId, setActiveSessionId] = useState<string | number | null>(null)
+  const [activeSessionId, setActiveSessionId] = useState(null)
   const [chunkIndex, setChunkIndex] = useState(0)
-  const [processingStatus, setProcessingStatus] = useState<SessionStatus | null>(null)
-  const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const [processingStatus, setProcessingStatus] = useState(null)
+  const [errorMsg, setErrorMsg] = useState(null)
 
   // Web Audio & MediaRecorder refs
-  const mediaStreamRef = useRef<MediaStream | null>(null)
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null)
-  const audioContextRef = useRef<AudioContext | null>(null)
-  const analyserRef = useRef<AnalyserNode | null>(null)
-  const timerIntervalRef = useRef<number | null>(null)
-  const pollingIntervalRef = useRef<number | null>(null)
+  const mediaStreamRef = useRef(null)
+  const mediaRecorderRef = useRef(null)
+  const audioContextRef = useRef(null)
+  const analyserRef = useRef(null)
+  const timerIntervalRef = useRef(null)
+  const pollingIntervalRef = useRef(null)
 
   // Initial defaults
   useEffect(() => {
@@ -116,14 +106,6 @@ export const LiveStudioPage: FC<LiveStudioPageProps> = ({
     }
   }
 
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      cleanupAudio()
-      if (pollingIntervalRef.current) clearInterval(pollingIntervalRef.current)
-    }
-  }, [])
-
   const cleanupAudio = () => {
     if (timerIntervalRef.current) {
       clearInterval(timerIntervalRef.current)
@@ -146,6 +128,14 @@ export const LiveStudioPage: FC<LiveStudioPageProps> = ({
     }
     analyserRef.current = null
   }
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      cleanupAudio()
+      if (pollingIntervalRef.current) clearInterval(pollingIntervalRef.current)
+    }
+  }, [])
 
   // Timer controls
   const startTimer = () => {
@@ -192,7 +182,7 @@ export const LiveStudioPage: FC<LiveStudioPageProps> = ({
       mediaStreamRef.current = stream
 
       // 3. Web Audio API AnalyserNode for real frequency waveform
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+      const AudioCtx = window.AudioContext || window.webkitAudioContext
       if (AudioCtx) {
         const ctx = new AudioCtx()
         audioContextRef.current = ctx
@@ -213,7 +203,7 @@ export const LiveStudioPage: FC<LiveStudioPageProps> = ({
       mediaRecorderRef.current = recorder
 
       let localSeq = 0
-      recorder.ondataavailable = async (e: BlobEvent) => {
+      recorder.ondataavailable = async (e) => {
         if (e.data && e.data.size > 0) {
           const currentSeq = localSeq++
           setChunkIndex(currentSeq + 1)
@@ -292,7 +282,7 @@ export const LiveStudioPage: FC<LiveStudioPageProps> = ({
     }
   }
 
-  const pollStatus = useCallback((sessionId: string | number) => {
+  const pollStatus = useCallback((sessionId) => {
     if (pollingIntervalRef.current) clearInterval(pollingIntervalRef.current)
 
     pollingIntervalRef.current = window.setInterval(async () => {
@@ -315,11 +305,11 @@ export const LiveStudioPage: FC<LiveStudioPageProps> = ({
     }, 2000)
   }, [onRefreshData])
 
-  const formatElapsedTime = (totalSecs: number) => {
+  const formatElapsedTime = (totalSecs) => {
     const hours = Math.floor(totalSecs / 3600)
     const mins = Math.floor((totalSecs % 3600) / 60)
     const secs = totalSecs % 60
-    const pad = (n: number) => String(n).padStart(2, '0')
+    const pad = (n) => String(n).padStart(2, '0')
     if (hours > 0) return `${pad(hours)}:${pad(mins)}:${pad(secs)}`
     return `${pad(mins)}:${pad(secs)}`
   }
